@@ -1,0 +1,142 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="stylesheet" type="text/css" th:href="@{/business/static/h-ui/css/H-ui.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/business/static/h-ui.admin/css/H-ui.admin.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/business/lib/Hui-iconfont/1.0.8/iconfont.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/business/static/h-ui.admin/skin/default/skin.css}" id="skin" />
+<link rel="stylesheet" type="text/css" th:href="@{/business/static/h-ui.admin/css/style.css}" />
+<title>系统日志</title>
+<style type="text/css">
+.table th, .table td {
+    padding: 0px;
+}
+span.runTime{
+	color:green;
+	font-weight:bold;
+}
+span.runStatus-error{
+	color:red;
+	font-weight:bold;
+	margin-left:3px;
+}
+span.runStatus-info{
+	color:green;
+	font-weight:bold;
+	margin-left:3px;
+}
+span.moniterNum{
+	color:#fff;
+	font-weight:bold;
+	margin-left:3px;
+}
+span.runDesc{
+	color:#fff;
+	font-weight:bold;
+	margin-left:3px;
+}
+</style>
+</head>
+<body style="margin-top: -39px;">
+<div class="page-container">
+	<form action="#" th:action="@{viewMoniterLogsLoad}" method="get">
+		<input type="hidden" id="moniterId" th:value="${id}">
+		<div class="text-c" style="margin-bottom:25px;">
+			<label style="float: right;">
+				<select id="interval" style="width:150px;">
+					<option value="7">最近一周</option>
+					<option value="30">最近一个月</option>
+					<option value="90">最近三个月</option>
+					<option value="180">最近半年</option>
+				</select>
+			</label>
+		</div>
+	</form>
+	<table id="gridData" th:fragment="gridData" class="table table-border table-bordered table-bg table-hover table-sort" style="background: #000;">
+		<tbody>
+			<tr class="text-l" style="border:0px" th:each="log:${list}">
+			<td style="border:0px">
+				<span class="runTime" th:text="${log.date}"></span>
+				<span class="moniterNum" th:text="${log.moniterId}">[1000000019]</span>
+				<span class="runStatus-error" th:if="${log.status} eq 'ERROR'" th:text="${log.status}"></span>
+				<span class="runStatus-info" th:if="${log.status} eq 'INFO'" th:text="${log.status}"></span>
+				<span class="runDesc" th:text="${log.describe}"></span>
+			</td>
+			</tr>
+			
+			<tr class="text-l" th:if="${size} eq 0" style="border:0px">
+				<td style="border:0px;color:#fff;font-weight:bold;text-indent:10px;">暂无数据</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" th:src="@{/business/lib/jquery/1.9.1/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/business/lib/layer/2.4/layer.js}"></script>
+<script type="text/javascript" th:src="@{/business/static/h-ui/js/H-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{/business/static/h-ui.admin/js/H-ui.admin.js}"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" th:src="@{/business/lib/My97DatePicker/4.8/WdatePicker.js}"></script>
+<script type="text/javascript" th:src="@{/business/lib/datatables/1.10.0/jquery.dataTables.min.js}"></script>
+<script type="text/javascript" th:src="@{/business/lib/laypage/1.2/laypage.js}"></script>
+<script type="text/javascript">
+$(function(){
+	$("#interval").change(function(){
+		debugger;
+		$('#gridData').load("viewMoniterLogsLoad?id="+$("#moniterId").val()+"&interval="+$("#interval").val());
+	});
+})
+/*查看日志*/
+function system_log_show(){
+	
+}
+
+
+/*日志刷新*/
+function editHeartbeat(obj,id)
+{
+	var power = '';
+	power += $("#version").text() == 0 && $("#device3").prop("checked") ? "1": "0";
+	power += $("#version").text() == 0 && $("#device2").prop("checked") ? "1": "0";
+	power += $("#device1").prop("checked") ? "1": "0";
+	
+	layer.confirm('确认要设置心跳电源状态吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: 'editHeartbeat',
+			data: {
+				id: obj.getAttribute("mid"),
+				heart: $('#beatheart').val(),
+				power: power
+			},
+			dataType: 'json',
+			success: function(data){
+				var msg = '';
+				if(data.retCode == 'IE'){
+					msg = "信息错误";
+				} else if(data.retCode == 'TT'){
+					msg = "Token 过期";
+				} else if(data.retCode == 'NR'){
+					msg = "终端未注册";
+				} else if(data.retCode == 'SF'){
+					msg = "设置失败";
+				} else {
+					msg = "设置成功";
+				}
+				layer.msg(msg,{icon:1,time:1000});
+			},
+			error:function(data) {
+				layer.msg("发生系统错误", {icon:1,time:1000});
+			},
+		});
+	});
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>关注终端在线预览</title>
+<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" th:href="@{/map/css/map.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/map/css/common.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/map/css/drag.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/map/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/map/css/bootstrap.custom.css}"/>
+    <script th:src="@{/map/jquery.js}"></script>
+    <script th:src="@{/layer/layer.js}"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=vp4w10eQ8knMPPOBsk5IVgXmXykTZBOR"></script>
+	<script type="text/javascript" th:src="@{/map/InfoBox_min.js}"></script>
+	<script type="text/javascript" th:src="@{/map/AreaRestriction_min.js}"></script>
+<!--[if IE 6]>
+<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<!--/meta 作为公共模版分离出去-->
+</head>
+<body>
+	<div id="container" style="position: absolute;left: 0px;top: 0px;border: 0px solid gray;overflow:hidden;">
+	</div>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+	<script type="text/javascript" th:src="@{/map/js/mapLocationMoniters.js}"></script>
+</html>

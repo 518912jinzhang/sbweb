@@ -1,0 +1,80 @@
+
+html,body,div,p,img,a{margin: 0 auto; padding: 0;}
+html,body{ height: 100%;}
+body{ padding:0px 2px; box-sizing: border-box;font-family: "微软雅黑"; font-size: 14px;}
+.img_100 img{ width: 100%;max-width: 100%;}
+.margin_bottom_15{margin-bottom: 15px;}
+.text_center{ text-align: center;}
+.drag_div{width: 100%; height: 100%; overflow: hidden;  position: relative;}
+.drag_div>div{ border-radius: 1px; padding: 1px; box-sizing: border-box; overflow: hidden;}
+.drag_div>div.one{
+	position: absolute;
+    background-image: url(../images/bg1.png);
+}
+.drag_div>div.one>.one-title{
+	position: absolute;
+	color: #bfb7b7;
+    font-weight: bold;
+	text-align:center;
+}
+.drag_div>div.one>.one-title>.title-value{
+	color: #fff;
+}
+.drag_div>div.two{
+	position: absolute;
+    background-image: url(../images/bg1.png);
+	}
+.drag_div>div.three{
+	position: absolute;
+    background-image: url(../images/bg1.png);
+	}
+.drag_div>div.four{
+	position: absolute;bottom:3px;left:245px; width: 885px; height: 215px; padding-top:0px;}
+.drag_div>div.five{
+	position: absolute;
+    background-image: url(../images/bg1.png);
+	}
+.tbl-title{
+	font-size:14px;
+}
+.drag_div>div.six{
+	position: absolute;
+    background-image: url(../images/bg1.png);
+}
+	/*电子信息采集*/
+.drag_div>div.seven{
+	position: absolute;
+	top: 29px;
+    height: 235px;
+    right:5px;
+    width: 16%;
+	overflow: auto;
+	border-radius: 3px;
+    background-image: url(../images/right.png);
+}
+.drag_div>div.eight{
+	position: absolute;
+	top: 29px;
+    height: 235px;
+    right:5px;
+    width: 16%;
+	overflow: auto;
+	border-radius: 3px;
+    background-image: url(../images/right.png);
+	}
+.drag_div>div.nine{
+	position: absolute;
+	top: 29px;
+    height: 235px;
+    right:5px;
+    width: 16%;
+	overflow: auto;
+	border-radius: 3px;
+    background-image: url(../images/right.png);
+}
+.drag_div>div.ten{position: absolute;top:540px;left:80%; width: 20%; height: 220px;}
+
+.drag_div>div.one img,.drag_div>div.two img,.drag_div>div.three img{ width: 100%; height: 180px;}
+.drag_div>div.four img{width: 100%; height: 700px;}
+.drag_div>div.five img,.drag_div>div.eight img{width: 100%; height: 220px;}
+.drag_div>div.six img,.drag_div>div.seven img,.drag_div>div.nine img,.drag_div>div.ten img{width: 100%; height: 160px;}

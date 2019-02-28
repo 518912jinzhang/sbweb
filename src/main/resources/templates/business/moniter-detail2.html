@@ -1,0 +1,390 @@
+<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<link rel="stylesheet" type="text/css" th:href="@{/business/static/h-ui/css/H-ui.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/business/static/h-ui.admin/css/H-ui.admin.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/business/lib/Hui-iconfont/1.0.8/iconfont.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/business/static/h-ui.admin/skin/default/skin.css}" id="skin" />
+<link rel="stylesheet" type="text/css" th:href="@{/business/static/h-ui.admin/css/style.css}" />
+
+<!-- switch -->
+<link rel="stylesheet" type="text/css" th:href="@{/on-off-switch/css/on-off-switch.css}"/>
+<style type="text/css">
+.white_content {
+    display: none;
+    position: absolute;
+    top: 1%;
+    left: 1%;
+    width: 100%;
+    background-color: white;
+    border: 2px solid #d3d3d3;
+    z-index: 1002;
+	/* overflow: auto; */
+}
+#ex1 .slider-selection {
+	background: #BABABA;
+}
+</style>
+<title>终端控制台</title>
+<meta name="keywords" content="设备感知数据监控分析管理平台">
+<meta name="description" content="设备感知数据监控分析管理平台">
+</head>
+<body>
+<article class="page-container">
+	<table class="table table-border table-bordered table-bg">
+		<thead>
+			<tr>
+				<th colspan="2" scope="col" style="font-size:14px;">终端信息
+				<a style="font-size: 16px;position: absolute;right: 50px;text-decoration:none" title="刷新"
+				    	href="javascript:location.replace(location.href);"><i class="Hui-iconfont">&#xe68f;</i></a></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr><th width="30%">终端ID</th><td th:text="${moniterPojo.id}"></td></tr>
+			<tr><th>IMEI</th><td th:text="${moniterPojo.imei}"></th></tr>
+<!-- 			<tr><th>经纬度</th><td ><lable>经度：</lable><span th:text="${moniterPojo.lon}"></span><lable>  纬度：</lable><span th:text="${moniterPojo.lat}"></span></td></tr> -->
+			<tr><th>经纬度</th><td><a id="locationInfoToMap" th:lon="${moniterPojo.lon}" th:lat="${moniterPojo.lat}"><i class="Hui-iconfont">&#xe6c9;</i>点击查看地图</a></td></tr>
+			<tr><th>注册时间</th><td th:text="${moniterPojo.createTime}"></td></tr>
+			<tr><th>协商时间</th><td th:text="${moniterPojo.updatedTime}"></td></tr>
+			<tr><th>心跳时间</th><td th:text="${moniterPojo.beatheartTime}"></td></tr>
+			<tr><th>版本号</th><td th:text="${moniterPojo.version}" id="version"></td></tr>
+			<tr><th>信号强度</th><td th:text="${moniterPojo.signal}"></td></tr>
+			<tr><th>所属乡镇</th><td th:text="${moniterPojo.townName}"></td></tr>
+			<tr><th>路口</th><td th:text="${moniterPojo.desc}"></td></tr>
+			<tr><th>告警原因</th><td id="warnDesc" th:text="${moniterPojo.warnDesc}"></td></tr>
+		</tbody>
+	</table>
+	
+	<table class="table table-border table-bordered table-bg mt-20">
+		<thead>
+			<tr>
+				<th colspan="2" scope="col" style="font-size:14px;">控制台信息</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr><th width="30%">心跳间隔</th>
+			<td style="">
+				<input id="beatheart" onkeyup="onlyNum(this)" onblur="returnNum(this)" 
+					value="60" class="input-text" style="border-radius: 5px;width: 70px;" th:value="${moniterPojo.beatheart}">
+<!-- 					<span style="margin-left:20px;color:red";padding-left: 22px;>(心跳间隔0~300)</span> -->
+				<span style="margin-left:30px;"><a style="font-size: 16px;text-decoration:none" th:mid="${moniterPojo.id}" onclick="editHeartbeat(this)"
+				    	href="javascript:;" title="设置心跳及电源"><img class="settingPng" width="25px" th:src="@{/business/img/greenSetting.png}"></a></span>
+			</td>
+			</tr>
+			<tr>
+				<th>电源状态</th>
+				<td>
+					<input type="hidden" id="powerStatus" th:value="${moniterPojo.powerStr}">
+					<span style="float:left;display:none;"><input id="device0" type="checkbox" class="custom-switch" name="" disabled="disabled"></span>
+					<span style="float:left;width: 80px;">输出电源口1：<input id="device1" type="checkbox" class="custom-switch" checked name=""></span>
+					<span style="float:left;width: 80px;" id="spn_power2">输出电源口2：<input id="device2" type="checkbox" class="custom-switch" checked name=""></span>
+					<span style="float:left;width: 80px;" id="spn_power3">输出电源口3：<input id="device3" type="checkbox" class="custom-switch" checked name=""></span>
+<!-- 					<span style="float:left;margin-left:30px;"><a style="font-size: 16px;text-decoration:none" th:mid="${moniterPojo.id}" onclick="editHeartbeat(this)" -->
+<!-- 				    	href="javascript:;" title="设置心跳及电源"><i class="Hui-iconfont">&#xe726;</i></a></span> -->
+				</td>
+			</tr>
+			<tr><th>双工状态</th><td><span id="wport0"></span><img style="display:none;" class="redPng" width="20px" th:src="@{/business/img/redSwitch.png}"><img style="display:none;" class="greenPng" width="20px" th:src="@{/business/img/greenSwitch.png}">
+			<span id="wport1" style="margin-left:30px;"></span><img style="display:none;" class="redPng" width="20px" th:src="@{/business/img/redSwitch.png}"><img style="display:none;" class="greenPng" width="20px" th:src="@{/business/img/greenSwitch.png}">
+			<span id="wport2" style="display:none;margin-left:30px;"></span><img style="display:none;" class="redPng" width="20px" th:src="@{/business/img/redSwitch.png}"><img style="display:none;" class="greenPng" width="20px" th:src="@{/business/img/greenSwitch.png}">
+			<span id="wport3" style="display:none;margin-left:30px;"></span><img style="display:none;" class="redPng" width="20px" th:src="@{/business/img/redSwitch.png}"><img style="display:none;" class="greenPng" width="20px" th:src="@{/business/img/greenSwitch.png}">
+			</td></tr>
+			<tr><th>电流值</th><td><span id="electronFlow0"></span><span id="electronFlow1" style="display:none;margin-left:30px;"></span><span id="electronFlow2" style="display:none;margin-left:30px;"></span></td></tr>
+		</tbody>
+	</table>
+	
+	<table class="table table-border table-bordered table-bg mt-20">
+		<thead>
+			<tr>
+				<th colspan="8" scope="col">设备统计<a style="font-size: 16px;position: absolute;right: 50px;text-decoration:none" title="刷新"
+				    	href="javascript:location.replace(location.href);"><i class="Hui-iconfont">&#xe68f;</i></a></th>
+			</tr>
+			<tr class="text-c">
+				<th>IP</th>
+				<th>端口</th>
+				<th>最后刷新时间</th>
+				<th>路口信息</th>
+				<th>设备品牌</th>
+				<th>设备类型</th>
+				<th>设备型号</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="text-c" th:each="device:${moniterPojo.deviceList}">
+				<td th:text="${device.ip}"></td>
+				<td th:text="${device.port}"></td>
+				<td th:text="${device.updatedTime}"></td>
+				<td th:text="${device.road}"></td>
+				<td th:text="${device.deviceTypeDesc}"></td>
+				<td th:text="${device.deviceBrandDesc}"></td>
+				<td th:text="${device.deviceModelDesc}"></td>
+				<td>
+				    <a style="font-size: 16px;" th:mid="${moniterPojo.id}" th:dip="${device.ip}" onclick="device_restart(this)"
+				    	href="javascript:;" title="重启"><i class="Hui-iconfont">&#xe6f7;</i></a>
+				    <a style="font-size: 16px;" th:mid="${moniterPojo.id}" th:dip="${device.ip}"
+				    	onclick="device_edit('设备信息编辑','editDeviceShow','4','','440',this)"
+				    	href="javascript:;" title="设备信息编辑"><i class="Hui-iconfont">&#xe60c;</i></a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<input type="hidden" id="duplexStr" th:value="${moniterPojo.duplexStr}">
+	<input type="hidden" id="electronFlowStr" th:value="${moniterPojo.electronFlow}">
+</article>
+
+<div id="divMap"  class="white_content">
+	<div style="text-align: right;">
+		<span style="font-size: 16px; margin-right: 17px; color: #56BE2D; font-weight: 600;cursor:pointer;"  onclick="CloseDiv('divMap')">关闭</span>
+	</div>
+	<div id="map_demo"></div>
+</div>
+
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" th:src="@{/business/lib/jquery/1.9.1/jquery.min.js}"></script> 
+<script type="text/javascript" th:src="@{/business/lib/layer/2.4/layer.js}"></script>
+<script type="text/javascript" th:src="@{/business/static/h-ui/js/H-ui.js}"></script> 
+<script type="text/javascript" th:src="@{/business/static/h-ui.admin/js/H-ui.admin.js}"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--switch相关的脚本--> 
+<script type="text/javascript" th:src="@{/on-off-switch/js/on-off-switch.js}"></script>
+<script type="text/javascript" th:src="@{/on-off-switch/js/on-off-switch-onload.js}"></script>
+
+<!--请在下方写此页面业务相关的脚本--> 
+<script type="text/javascript" th:src="@{/business/lib/My97DatePicker/4.8/WdatePicker.js}"></script>
+<script type="text/javascript" th:src="@{/business/lib/jquery.validation/1.14.0/jquery.validate.js}"></script> 
+<script type="text/javascript" th:src="@{/business/lib/jquery.validation/1.14.0/validate-methods.js}"></script> 
+<script type="text/javascript" th:src="@{/business/lib/jquery.validation/1.14.0/messages_zh.js}"></script>
+
+<!-- 新增 -->
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=vp4w10eQ8knMPPOBsk5IVgXmXykTZBOR"></script>
+<script type="text/javascript" th:src="@{/map/InfoBox_min.js}"></script>
+<script type="text/javascript" th:src="@{/map/AreaRestriction_min.js}"></script>
+<script th:src="@{/business/map/InitMap.js}"></script>
+<script type="text/javascript" th:src="@{/business/lib/jquery/1.9.1/jquerysession.js}"></script> 
+
+<script type="text/javascript">
+$(function(){
+	var warnDesc = $("#warnDesc").text();
+	if(warnDesc && warnDesc != '设备运行正常'){
+		$("#warnDesc").css("color", "red");
+	}
+    var ps = $('#powerStatus').val();
+    var ds1 = ps.substring(3,4);//服务器
+    var ds2 = ps.substring(2,3);
+    var ds3 = ps.substring(1,2);
+    var ds4 = ps.substring(0,1);
+    if(ds2 == '0') {
+    	$('#device1').removeAttr("checked");
+    }
+    if($("#version").text() != 1) {
+    	$('#spn_power2,#spn_power3').show();
+    	//双工显示
+    	$('#wport2,#wport3').show();
+        if(ds3 == '0') {
+        	$('#device2').removeAttr("checked");
+        }
+        if(ds4 == '0') {
+        	$('#device3').removeAttr("checked");
+        }
+
+        new DG.OnOffSwitch({
+            el: '#device2',
+            textOn: '开',
+            textOff: '关',
+            height: 20,
+            width: 70,
+            listener:function(name, checked){
+                //$("#listener-text").html("Listener called for " + name + ", checked: " + checked);
+            }
+        });
+        new DG.OnOffSwitch({
+            el: '#device3',
+            textOn: '开',
+            textOff: '关',
+            height: 20,
+            width: 70,
+            listener:function(name, checked){
+                //$("#listener-text").html("Listener called for " + name + ", checked: " + checked);
+            }
+        });
+    } else {
+    	$('#spn_power2,#spn_power3').hide();
+    	$('#wport2,#wport3').hide();
+    }
+    new DG.OnOffSwitch({
+        el: '#device1',
+        textOn: '开',
+        textOff: '关',
+        height: 20,
+        width: 70,
+        listener:function(name, checked){
+            //$("#listener-text").html("Listener called for " + name + ", checked: " + checked);
+        }
+    });
+
+    var duplexStr = $("#duplexStr").val();
+    var p3 = duplexStr.substring(0,1);
+    var p2 = duplexStr.substring(1,2);
+    var p1 = duplexStr.substring(2,3);
+    var p0 = duplexStr.substring(3,4);
+    judgeNoOrOff("服务器网口：",$("#wport0"),p0);
+    judgeNoOrOff("网口1：",$("#wport1"),p1);
+// 	$("#wport0").text("服务器网口："+(p0==0?"关":"开"));
+// 	$("#wport1").text("网口1："+(p1==0?"关":"开"));
+    if($("#version").text() == 0) {
+    	judgeNoOrOff("网口2：",$("#wport2"),p2);
+        judgeNoOrOff("网口3：",$("#wport3"),p3);
+//     	$("#wport2").text("网口2："+(p2==0?"关":"开"));
+//     	$("#wport3").text("网口3："+(p3==0?"关":"开"));
+    }
+    
+    var electronFlowStr = $("#electronFlowStr").val();
+    var electronFlowStrTemp=electronFlowStr.split("|");
+    if(electronFlowStr!=""){
+    	$("#electronFlow0").text("Port1："+(electronFlowStrTemp[0]==undefined?"123":electronFlowStrTemp[0]));
+    	if($("#version").text() == 0){
+    		$('#electronFlow1,#electronFlow2').show();
+	    	$("#electronFlow1").text("Port2："+(electronFlowStrTemp[1]==undefined?"123":electronFlowStrTemp[1]));
+	        $("#electronFlow2").text("Port3："+(electronFlowStrTemp[2]==undefined?"123":electronFlowStrTemp[2]));
+    	}else{
+    		$('#electronFlow1,#electronFlow2').hide();
+    	}
+    }
+	
+});
+
+/*设备-编辑*/
+function device_edit(title,url,id,w,h,obj){
+	url = url+"?id="+obj.getAttribute("mid")+"&ip="+obj.getAttribute("dip")
+	layer_show(title,url,w,h);
+}
+
+/*设备-停用*/
+function device_stop(obj,id){
+	layer.confirm('确认要停用吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: '',
+			dataType: 'json',
+			success: function(data){
+				layer.msg('功能暂不支持!',{icon: 6,time:1000});
+			},
+			error:function(data) {
+				console.log(data.msg);
+			},
+		});
+	});
+}
+
+/*设备-停用*/
+function editDevice(obj,id){
+	layer.confirm('确认要停用吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: 'editDevice',
+			data: {id: obj.getAttribute("mid"),ip: obj.getAttribute("dip")},
+			dataType: 'json',
+			success: function(data){
+				layer.msg('功能暂不支持!',{icon: 6,time:1000});
+			},
+			error:function(data) {
+				console.log(data.msg);
+			},
+		});
+	});
+}
+
+/*设备-重启*/
+function device_restart(obj,id){
+	layer.confirm('确认要重启吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: 'deviceRestart',
+			data: {id: obj.getAttribute("mid"),ip: obj.getAttribute("dip")},
+			dataType: 'json',
+			success: function(data){
+				console.log(data);
+				layer.msg('重启命令已发送!',{icon: 6,time:1000});
+			},
+			error:function(data) {
+				console.log(data.msg);
+			},
+		});
+	});
+}
+/*设置-控制台*/
+function editHeartbeat(obj,id)
+{
+	var power = '';
+	power += $("#version").text() == 0 && $("#device3").prop("checked") ? "1": "0";
+	power += $("#version").text() == 0 && $("#device2").prop("checked") ? "1": "0";
+	power += $("#device1").prop("checked") ? "1": "0";
+	
+	layer.confirm('确认要设置心跳电源状态吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: 'editHeartbeat',
+			data: {
+				id: obj.getAttribute("mid"),
+				heart: $('#beatheart').val(),
+				power: power
+			},
+			dataType: 'json',
+			success: function(data){
+				var msg = '';
+				if(data.retCode == 'IE'){
+					msg = "信息错误";
+				} else if(data.retCode == 'TT'){
+					msg = "Token 过期";
+				} else if(data.retCode == 'NR'){
+					msg = "终端未注册";
+				} else if(data.retCode == 'SF'){
+					msg = "设置失败";
+				} else {
+					msg = "设置成功";
+				}
+				layer.msg(msg,{icon:1,time:1000});
+			},
+			error:function(data) {
+				layer.msg("发生系统错误", {icon:1,time:1000});
+			},
+		});
+	});
+}
+function onlyNum(that){
+    that.value=that.value.replace(/\D/g,"");
+}
+function returnNum(that){
+    if(that.value==""){
+        that.value=0;
+    }
+//     if(that.value > 300){
+//         that.value=300;
+//     }
+    if(that.value < 0){
+        that.value=0;
+    }
+}
+
+//判断开 关 显示红色图标或者绿色图标
+function judgeNoOrOff(tag,that,param){
+	$(that).text(tag);
+    if(param==0){//关 红色
+    	$(that).next().show();
+    }else if(param==1){//开  绿色
+    	$(that).next().next().show();
+    }
+}
+
+</script> 
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

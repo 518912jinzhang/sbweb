@@ -1,0 +1,20 @@
+.table-condensed caption {color:#fff;font-weight:bold;font-size:14px;font-family:"Microsoft YaHei";line-height: 0px;}
+.table-condensed thead {color:#b3b3b3;}
+.table-condensed tbody {color:#fff;font-weight:100;font-size:12px;}
+.table-condensed tr {cursor:pointer;}
+
+/*echartsHome.css override*/
+.main {
+	border: 1px solid #e8e7ec;
+	padding: 0px;
+	margin-bottom: 10px;
+}
+
+
+.eg-msg {color: red;}
+.tbl-caption {
+	font-size:14px;color:#fff;font-weight:bold;text-align: center;
+}
+.tbl-caption-right {
+	font-size:14px;color:#fff;font-weight:bold;text-align: left;
+}

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <title>平安城市智能感知监测分析系统</title>
+	
+    <link  rel="stylesheet" th:href="@{/echarts-2.2.7/doc/asset/css/font-awesome.min.css}">
+    <link  rel="stylesheet" th:href="@{/echarts-2.2.7/doc/asset/css/bootstrap.css}">
+    <link  rel="stylesheet" th:href="@{/echarts-2.2.7/doc/asset/css/carousel.css}">
+    <link  rel="stylesheet" th:href="@{/echarts-2.2.7/doc/asset/css/echartsHome.css}">
+    <!-- 
+	<link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/map/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/map/css/bootstrap.custom.css"/> -->
+    <script th:src="@{/map/jquery.js}"></script>
+    <script th:src="@{/map/layer/layer.js}"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=vp4w10eQ8knMPPOBsk5IVgXmXykTZBOR"></script>
+	<script type="text/javascript" th:src="@{/map/InfoBox_min.js}"></script>
+	<script type="text/javascript" th:src="@{/map/AreaRestriction_min.js}"></script>
+
+</head>
+<body style="padding-top: 0px;background-image: url(map/gis_bg.png)">
+<div class="drag_div" id="template" style="width:1366px; height:768px;">
+
+	<div class="one" id="divChart1">
+		<div id="main1" style="height: 240px;"></div>
+		<div class="one-title">
+			<span>设备总数：</span><span class="title-value" id="num1"></span>
+			<span>在线数：</span><span class="title-value" id="num2"></span><br/>
+			<span>离线数：</span><span class="title-value" id="num3"></span>
+		</div>
+	</div>
+	<div class="two" id="divChart2">
+		<div id="main2" style="height: 200px;"></div>
+	</div>
+	<div class="three" id="divChart3">
+		<div id="main3" style="height: 220px;"></div>
+	</div>
+
+	<div class="five" style="overflow: auto;" id="divTable1" title="故障列表">
+		<table class="table table-condensed" >
+		<caption class="tbl-caption" style="font-size:18px;">故障列表</caption>
+		   <thead>
+			  <tr>
+				 <th>终端编号</th>
+				 <th>告警类型</th>
+				 <th>告警时间</th>
+			  </tr>
+		   </thead>
+		   <tbody>
+			  <tr th:each="bd:${bdList}">
+				 <td id="moniterId" th:lon="${bd.lon}" th:lat="${bd.lat}" th:text="${bd.id}"></td>
+				 <td th:text="${bd.warnDesc}"></td>
+				 <td th:text="${bd.warnDate}"><span class="eg-msg"></span></td>
+			  </tr>
+		   </tbody>
+		</table>
+	</div>
+	<div class="six" id="divChart4" title="乡镇排名">
+		<div id="main4" style="height: 200px;"></div>
+	</div>
+	
+	<div class="seven" id="divTable2" title="电子信息采集">
+		<table class="table table-condensed" >
+		<caption class="tbl-caption-right">电子信息采集</caption>
+		   <thead>
+			  <tr>
+				 <th>位置</th>
+				 <th>状态</th>
+				 <th>IP</th>
+			  </tr>
+		   </thead>
+		   <tbody style="height:20px; overflow-y:auto;">
+			  <tr lat="115.044597" lon="34.434544">
+				 <td>湖东路定点1</td>
+				 <td><span class="eg-msg">断电</span></td>
+				 <td>10.25.0.12</td>
+			  </tr>
+			  <tr lat="115.063569" lon="34.435974">
+				 <td>湖东路定点2</td>
+				 <td><span class="eg-msg">断电</span></td>
+				 <td>10.25.0.13</td>
+			  </tr>
+		   </tbody>
+		</table>
+	</div>
+	
+	<div class="eight" id="divTable3" title="电子信息采集">
+		<table class="table table-condensed" >
+		<caption class="tbl-caption-right">重点场所运行监控</caption>
+		   <thead>
+			  <tr>
+				 <th>状态</th>
+				 <th>编号</th>
+				 <th>采集数量</th>
+			  </tr>
+		   </thead>
+		   <tbody>
+			  <tr lat="115.044597" lon="34.434544">
+				 <td>正常</td>
+				 <td>05102936</td>
+				 <td>3</td>
+			  </tr>
+			  <tr lat="115.063569" lon="34.435974">
+				 <td>正常</td>
+				 <td>05102937</td>
+				 <td><span class="eg-msg">4</span></td>
+			  </tr>
+			  <tr lat="115.063569" lon="34.435974">
+				 <td>正常</td>
+				 <td>05102937</td>
+				 <td><span class="eg-msg">4</span></td>
+			  </tr>
+		   </tbody>
+		</table>
+	</div>
+	
+	<div class="nine" id="divTable4" title="电子信息采集">
+		<table class="table table-condensed" >
+		<caption class="tbl-caption-right">重要目标采集</caption>
+		   <thead>
+			  <tr>
+				 <th>状态</th>
+				 <th>编号</th>
+				 <th>采集数量</th>
+			  </tr>
+		   </thead>
+		   <tbody>
+			  <tr lat="115.044597" lon="34.434544">
+				 <td>正常</td>
+				 <td>05102936</td>
+				 <td>3</td>
+			  </tr>
+			  <tr lat="115.063569" lon="34.435974">
+				 <td>正常</td>
+				 <td>05102937</td>
+				 <td><span class="eg-msg">4</span></td>
+			  </tr>
+			  <tr lat="115.063569" lon="34.435974">
+				 <td>正常</td>
+				 <td>05102937</td>
+				 <td><span class="eg-msg">4</span></td>
+			  </tr>
+		   </tbody>
+		</table>
+	</div>
+	<div id="divMap" title="地图在线">
+		<div id="map_demo"></div>
+	</div>
+	
+	<div id="map_title_control"></div>
+	<div id="map_title">平安城市智能感知监测分析系统</div>
+	<div id="map_lengend" style="display: none;">
+		<div>
+			<div class="legend-item"><div id="legend01" class="legend-item-left"></div><div class="legend-item-right">电子警察</div></div>
+			<div class="legend-item"><div id="legend02" class="legend-item-left"></div><div class="legend-item-right">治安卡口</div></div>
+			<div class="legend-item"><div id="legend03" class="legend-item-left"></div><div class="legend-item-right">人脸识别</div></div>
+		</div>
+	</div>
+</div>
+
+</body>
+
+	<link rel="stylesheet" type="text/css" th:href="@{/map/css/drag.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/map/css/map.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/map/css/common.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/map/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/map/css/bootstrap.custom.css}"/>
+	
+    <script th:src="@{/echarts-2.2.7/doc/example/www/js/echarts.js}"></script>
+    <script th:src="@{/echarts-2.2.7/doc/asset/js/jquery.min.js}"></script>
+    <script th:src="@{/echarts-2.2.7/doc/asset/js/bootstrap.min.js}"></script>
+    <script th:src="@{/echarts-2.2.7/doc/asset/js/echartsExample.js}"></script>
+	<script th:src="@{map/js/InitMap.js}"></script>
+	<script type="text/javascript" th:src="@{/business/lib/jquery/1.9.1/jquerysession.js}"></script> 
+</html>

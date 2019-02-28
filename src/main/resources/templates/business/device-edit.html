@@ -1,0 +1,149 @@
+<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="Bookmark" href="/favicon.ico" >
+<link rel="Shortcut Icon" href="/favicon.ico" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5shiv.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" th:href="@{/business/static/h-ui/css/H-ui.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/business/static/h-ui.admin/css/H-ui.admin.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/business/lib/Hui-iconfont/1.0.8/iconfont.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/business/static/h-ui.admin/skin/default/skin.css}" id="skin" />
+<link rel="stylesheet" type="text/css" th:href="@{/business/static/h-ui.admin/css/style.css}" />
+<!--[if IE 6]>
+<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<!--/meta 作为公共模版分离出去-->
+<title>编辑设备信息</title>
+<meta name="keywords" content="设备感知数据监控分析管理平台">
+<meta name="description" content="设备感知数据监控分析管理平台">
+</head>
+<body>
+<article class="page-container">
+	<form action="#" th:action="@{editDevice}" method="post" class="form form-horizontal" id="form-member-add" th:object="${device}">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>终端ip：</label>
+			<div class="formControls col-xs-8 col-sm-5">
+				<input type="text" class="input-text" th:value="${ip}" th:field="*{ip}" readonly>
+				<input type="hidden" class="input-text" th:value="${moniterId}" th:field="*{moniterId}">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>端口号：</label>
+			<div class="formControls col-xs-8 col-sm-5">
+				<input type="text" class="input-text" th:value="${port}" th:field="*{port}" readonly>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>路口信息：</label>
+			<div class="formControls col-xs-8 col-sm-5">
+				<input type="text" class="input-text" value="" th:text="${road}" th:field="*{road}">
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>设备类型：</label>
+			<div class="formControls col-xs-8 col-sm-5">
+				<span class="select-box">
+				<select class="select" size="1" th:value="${deviceType}" th:field="*{deviceType}">
+					<option value="0">电子警察</option>
+					<option value="1">治安卡口</option>
+					<option value="2">监控</option>
+					<option value="3">人脸识别</option>
+				</select>
+				</span> 
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>设备品牌：</label>
+			<div class="formControls col-xs-8 col-sm-5">
+				<span class="select-box">
+				<select class="select" size="1" th:value="${deviceBrand}" th:field="*{deviceBrand}">
+					<option value="10">乔安</option>
+					<option value="11">海康威视</option>
+					<option value="12">海尔</option>
+					<option value="13">亚安</option>
+					<option value="14">小米</option>
+				</select>
+				</span> 
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>设备型号：</label>
+			<div class="formControls col-xs-8 col-sm-5">
+				<span class="select-box">
+				<select class="select" size="1" th:value="${deviceModel}" th:field="*{deviceModel}">
+					<option value="110">DS-2CD1301-I</option>
+					<option value="111">DS-2CD1311-I</option>
+					<option value="112">DS-2CD1321-I</option>
+				</select>
+				</span> 
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-5 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			</div>
+		</div>
+</article>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" th:src="@{/business/lib/jquery/1.9.1/jquery.min.js}"></script> 
+<script type="text/javascript" th:src="@{/business/lib/layer/2.4/layer.js}"></script>
+<script type="text/javascript" th:src="@{/business/static/h-ui/js/H-ui.min.js}"></script> 
+<script type="text/javascript" th:src="@{/business/static/h-ui.admin/js/H-ui.admin.js}"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本--> 
+<script type="text/javascript" th:src="@{/business/lib/My97DatePicker/4.8/WdatePicker.js}"></script>
+<script type="text/javascript" th:src="@{/business/lib/jquery.validation/1.14.0/jquery.validate.js}"></script> 
+<script type="text/javascript" th:src="@{/business/lib/jquery.validation/1.14.0/validate-methods.js}"></script> 
+<script type="text/javascript" th:src="@{/business/lib/jquery.validation/1.14.0/messages_zh.js}"></script>
+<script type="text/javascript">
+$(function(){
+	$("#form-member-add").validate({
+		rules:{
+			username:{
+				required:true,
+				minlength:2,
+				maxlength:16
+			},
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+			var options = {
+					success: function (data) {
+						debugger;
+						console.log(data);
+						data=JSON.parse(data);
+						var msg = '';
+						if(data.retCode == 'IE'){
+							msg = "信息错误";
+						} else if(data.retCode == 'TT'){
+							msg = "Token 过期";
+						} else if(data.retCode == 'MF'){
+							msg = "修改失败";
+						} else {
+							msg = "修改成功";
+						}
+						layer.msg(msg,{icon:1,time:7000});
+					}
+			};
+			$(form).ajaxSubmit(options);
+		}
+	});
+});
+</script> 
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>
